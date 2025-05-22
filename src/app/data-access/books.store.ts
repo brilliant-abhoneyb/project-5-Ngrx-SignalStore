@@ -111,7 +111,7 @@ export const BooksStore = signalStore(
         year: store.selectedYear()
       });
     },
-
+    
     updateYear(year: string) {
       patchState(store, { selectedYear: year, currentPage: 1 });
       this.loadByTitle({
@@ -121,7 +121,7 @@ export const BooksStore = signalStore(
         category: store.selectedCategory(),
         year
       });
-    },
+    },    
 
     updatePage(page: number) {
       patchState(store, { currentPage: page });

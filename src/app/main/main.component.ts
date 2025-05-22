@@ -42,7 +42,6 @@ export class MainComponent {
       this.booksStore.updateCategory(this.selectedCategory());
     });
     
-
     effect(() => {
       this.booksStore.updateYear(this.selectedYear());
     });
@@ -58,12 +57,12 @@ export class MainComponent {
     const value = (event.target as HTMLSelectElement).value;
     this.selectedCategory.set(value);
   }
-
+  
   onYearChange(event: Event): void {
     const value = (event.target as HTMLSelectElement).value;
     this.selectedYear.set(value);
   }
-
+  
   paginatedPages(): number[] {
     const pages: number[] = [];
     const total = this.totalPages();
