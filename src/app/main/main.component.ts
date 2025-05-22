@@ -75,9 +75,7 @@ export class MainComponent {
     const end = Math.min(total, start + maxVisible - 1);
 
     for (let i = start; i <= end; i++) {
-      if (i <= total) {
-        pages.push(i);
-      }
+      if (i <= total) { pages.push(i) }
     }
     return pages;
   }
