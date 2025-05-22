@@ -49,7 +49,7 @@ export class BookItemService {
   
         return {
           books,
-          totalFound: books.length,
+          totalFound: res.totalItems || books.length, 
         };
       })
     );

@@ -54,8 +54,7 @@ export const BooksStore = signalStore(
             
               const totalItems = response.totalFound;
               const totalPages = Math.max(1, Math.ceil(totalItems / query.limit));
-              const isValidPage = response.books.length === query.limit || 
-              (query.page === totalPages && response.books.length > 0);
+              const isValidPage = response.books.length > 0;
 
               return {
                 books: response.books,
