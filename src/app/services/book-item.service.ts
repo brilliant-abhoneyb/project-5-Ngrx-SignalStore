@@ -7,6 +7,8 @@ export type SearchBooksQuery = {
   query: string;
   page: number;
   limit: number;
+  category?: string;
+  year?: string;
 };
 
 @Injectable({
@@ -17,9 +19,15 @@ export class BookItemService {
 
   constructor(private http: HttpClient) {}
 
-  searchBooks(query: string, page: number, limit: number): Observable<any> {
+  searchBooks(query: string, page: number, limit: number, category?: string, year?: string): Observable<any> {
     const startIndex = (page - 1) * limit;
+
+    let fullQuery = query || 'book';
+    if (category) fullQuery += `+subject:${category}`;
+    if (year) fullQuery += `+inpublisher:${year}`;
+
     const apiUrl = `${this.apiUrl}?q=${encodeURIComponent(query || 'book')}&startIndex=${startIndex}&maxResults=${limit}`;
+    
     return this.http.get<any>(apiUrl).pipe(
       map((res) => ({
         books:

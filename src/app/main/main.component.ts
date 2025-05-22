@@ -15,7 +15,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export class MainComponent {
   private readonly booksStore = inject(BooksStore);
 
-  readonly books = this.booksStore.filteredBooks;
+  readonly books = this.booksStore.books;
   readonly isLoading = this.booksStore.isLoading;
   readonly categories = this.booksStore.categories;
   readonly years = this.booksStore.years;
@@ -35,22 +35,22 @@ export class MainComponent {
     effect(() => {
       const query = this.searchTermSignal();
       this.booksStore.updateSearchTerm(query!);
-      this.booksStore.updatePage(1);
+      this.booksStore.updateTitle(query!)
     });
 
     effect(() => {
       this.booksStore.updateCategory(this.selectedCategory());
     });
+    
 
     effect(() => {
-      const year = this.selectedYear();
-      this.booksStore.updateYear(this.selectedYear()); 
+      this.booksStore.updateYear(this.selectedYear());
     });
 
     effect(() => {
       const page = this.currentPage();
       const query = this.booksStore.searchTerm();
-      this.booksStore.loadByTitle({ query, page, limit: 20 });
+      this.booksStore.updatePage(page);
     });
   }
 
@@ -88,30 +88,3 @@ export class MainComponent {
     this.booksStore.updatePage(page);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
