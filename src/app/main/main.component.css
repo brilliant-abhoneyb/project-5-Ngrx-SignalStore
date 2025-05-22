@@ -1,0 +1,74 @@
+.main__page{
+    margin: 30px;
+}
+
+.main__page-cto{
+    width: 100%;
+    margin: 40px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.main__page-cto__input{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.main__page-search__input{
+    width: 50%;
+    margin: 0 40px 0 0;
+    padding: 8px 10px;
+}
+
+.main__page-filters{
+    width: 70%;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.main__page-filters select{
+    width: 50%;
+}
+
+.book__card-container{
+    margin-top: 55px;
+    width: 100%;
+    display: flex;
+    gap: 50px;
+}
+
+.book__card-cover{
+    margin: 40px 30px;
+    width: 215px;
+    height: 270px;
+    max-width: 40%;
+}
+
+.book__card-text{
+    padding-top: 20px;
+    width: 60%;
+}
+
+.book__card-text-joint{
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.book__card-link{
+    color: blue;
+}
+
+.main__page-pagination{
+    margin: 70px 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.main__page-pagination button{
+    cursor: pointer;
+}

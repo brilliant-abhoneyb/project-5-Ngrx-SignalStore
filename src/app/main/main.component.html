@@ -1,0 +1,62 @@
+<div class="main__page">
+  <h1 routerLink="/" routerLinkActive="router-link-active">Books Search</h1>
+
+  <div class="main__page-cto">
+    <div class="main__page-cto__input">
+      <input [formControl]="searchControl" class="main__page-search__input" placeholder="Enter title"/>
+      <div *ngIf="isLoading()">Loading...</div>
+    </div>
+
+    <div class="main__page-filters">
+      <label>Category:</label>
+      <select [value]="selectedCategory()" (change)="onCategoryChange($event)">
+        <option value="">All Categories</option>
+        <option *ngFor="let category of categories()" [value]="category">{{ category }}</option>
+      </select>
+
+      <label>Year:</label>
+      <select [value]="selectedYear()" (change)="onYearChange($event)">
+        <option value="">All Years</option>
+        <option *ngFor="let year of years()" [value]="year">{{ year }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading()">
+    <div *ngIf="books().length > 0; else noResults">
+      <div *ngFor="let book of books()" class="book__card-container">
+        <img *ngIf="book.coverId" [src]="book.coverId" class="book__card-cover" />
+        <div class="book__card-text">
+          <h3>{{ book.title }}</h3>
+          <p><strong>Author:</strong> {{ book.author }}</p>
+          <p><strong>Year:</strong> {{ book.year || 'Not available' }}</p>
+          <p><strong>Category:</strong> {{ book.category || 'Not available' }}</p>
+          <p><strong>Description:</strong> {{ book.description || 'No description available.' }}</p>
+          <div class="book__card-text-joint">
+            <p *ngIf="book.pageCount"><strong>Pages:</strong> {{ book.pageCount }}</p>
+            <a *ngIf="book.previewLink" [href]="book.previewLink" class="book__card-link" target="_blank">Preview</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav *ngIf="totalPages() > 1 && books().length > 0" class="main__page-pagination">
+      <button (click)="onPageChange(currentPage() - 1)" [disabled]="currentPage() === 1">Previous</button>
+
+      <div *ngFor="let page of paginatedPages()">
+        <button *ngIf="page <= totalPages()"
+        (click)="onPageChange(page)"
+        [class.active]="page === currentPage()"
+        [disabled]="isLoading()">
+        {{ page }}
+        </button>
+      </div>
+
+      <button (click)="onPageChange(currentPage() + 1)" [disabled]="currentPage() === totalPages()">Next</button>
+    </nav>
+
+    <ng-template #noResults>
+      <p>No books match the search or filters.</p>
+    </ng-template>
+  </div>
+</div>
