@@ -1,14 +1,14 @@
 import { Book } from "./book.model";
 
 export interface BooksState {
-    books: Book[];
-    isLoading: boolean;
-    searchTerm: string;
-    categories: string[];
-    years: string[];
-    selectedCategory: string;
-    selectedYear: string;
-    totalPages: number;
+    books: Book[],
+    isLoading: boolean,
+    searchTerm: string,
+    categories: string[],
+    years: string[],
+    selectedCategory: string,
+    selectedYear: string,
+    totalPages: number,
     currentPage: number
 }
   
@@ -20,7 +20,7 @@ export const initialState: BooksState = {
     years: [],
     selectedCategory: '',
     selectedYear: '',
-    totalPages: 5,
+    totalPages: 1,
     currentPage: 1
 };
 
