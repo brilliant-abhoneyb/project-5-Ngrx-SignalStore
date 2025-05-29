@@ -24,13 +24,12 @@ export class BookItemService {
   
     let fullQuery = query || 'book';
     if (category) fullQuery += `+subject:${category}`;
-    if (year) fullQuery += `+inpublisher:${year}`;
     
     const apiUrl = `${this.apiUrl}?q=${encodeURIComponent(fullQuery)}&startIndex=${startIndex}&maxResults=${limit}`;
-    
+  
     return this.http.get<any>(apiUrl).pipe(
-      map((res) => ({
-        books: res.items?.map((item: any) => ({
+      map((res) => {
+        let books = res.items?.map((item: any) => ({
           title: item.volumeInfo.title,
           author: item.volumeInfo.authors?.join(', ') || 'Unknown',
           description: item.volumeInfo.description || 'No description available',
@@ -42,9 +41,17 @@ export class BookItemService {
           pageCount: item.volumeInfo.pageCount || '',
           language: item.volumeInfo.language || '',
           rating: item.volumeInfo.averageRating || 0,
-        })) || [],
-        totalFound: res.totalItems || 0,
-      }))
+        })) || [];
+  
+        if (year) {
+          books = books.filter((book: { year: string; }) => book.year.startsWith(year));
+        }
+  
+        return {
+          books,
+          totalFound: books.length,
+        };
+      })
     );
   }
 }
