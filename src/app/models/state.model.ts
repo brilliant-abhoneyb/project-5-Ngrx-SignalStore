@@ -30,5 +30,5 @@ export type SearchBooksQuery = {
     limit: number;
     category?: string;
     year?: string;
-  };
+};
   
