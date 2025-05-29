@@ -41,30 +41,13 @@ const initialState: BooksState = {
 export const BooksStore = signalStore(
   { providedIn: 'root' },
   withState<BooksState>(initialState),
-  withComputed((store) => ({
-    filteredBooks: computed(() => {
-      const books = store.books();
-      const term = store.searchTerm().toLowerCase();
-      const category = store.selectedCategory();
-      const year = store.selectedYear();
-
-      return books.filter((book) => {
-        const matchesTitle = term ?
-          book.title.toLowerCase().includes(term) : true;
-        const matchesCategory = category ? 
-          book.category.includes(category) : true;
-        const matchesYear = year ? 
-          book.year.includes(year) : true;
-        return matchesCategory && matchesTitle && matchesYear;
-      });
-    }),
-  })),
+  withComputed((store) => ({ })),
   withMethods((store, bookService = inject(BookItemService)) => ({
     loadByTitle: rxMethod<SearchBooksQuery>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((query) =>
-          bookService.searchBooks(query.query, query.page, query.limit).pipe(
+          bookService.searchBooks(query.query, query.page, query.limit, store.selectedCategory(), store.selectedYear()).pipe(
             map((response) => {
               const extractUnique = (items: string[]): string[] => 
                 items.filter((item: string, index: number) => items.indexOf(item) === index);
@@ -105,7 +88,13 @@ export const BooksStore = signalStore(
     ),
     updateTitle(title: string) {
       patchState(store, { books: [], currentPage: 1 });
-      this.loadByTitle({ query: title, page: 1, limit: 20 });
+      this.loadByTitle({
+        query: title,
+        page: 1,
+        limit: 20,
+        category: store.selectedCategory(),
+        year: store.selectedYear()
+      });
     },
 
     updateSearchTerm(searchTerm: string) {
@@ -113,19 +102,35 @@ export const BooksStore = signalStore(
     },
 
     updateCategory(category: string) {
-      patchState(store, { selectedCategory: category });
+      patchState(store, { selectedCategory: category, currentPage: 1 });
+      this.loadByTitle({
+        query: store.searchTerm(),
+        page: 1,
+        limit: 20,
+        category,
+        year: store.selectedYear()
+      });
     },
 
     updateYear(year: string) {
-      patchState(store, { selectedYear: year });
+      patchState(store, { selectedYear: year, currentPage: 1 });
+      this.loadByTitle({
+        query: store.searchTerm(),
+        page: 1,
+        limit: 20,
+        category: store.selectedCategory(),
+        year
+      });
     },
 
     updatePage(page: number) {
       patchState(store, { currentPage: page });
       this.loadByTitle({
         query: store.searchTerm(),
-        page: page,
+        page,
         limit: 20,
+        category: store.selectedCategory(),
+        year: store.selectedYear()
       });
     },
   }))
