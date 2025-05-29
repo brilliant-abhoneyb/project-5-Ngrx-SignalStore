@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Book, BookSearchResult, GoogleBooksApiResponse } from '../models/book.model';
 
 
 @Injectable({
@@ -12,17 +13,15 @@ export class BookItemService {
 
   constructor(private http: HttpClient) {}
 
-  searchBooks(query: string, page: number, limit: number, category?: string, year?: string): Observable<any> {
+  searchBooks(query: string, page: number, limit: number, category?: string, year?: string): Observable<BookSearchResult> {
     const startIndex = (page - 1) * limit;
-  
     let fullQuery = query || 'book';
     if (category) fullQuery += `+subject:${category}`;
-    
     const apiUrl = `${this.apiUrl}?q=${encodeURIComponent(fullQuery)}&startIndex=${startIndex}&maxResults=${limit}`;
   
-    return this.http.get<any>(apiUrl).pipe(
-      map((res) => {
-        let books = res.items?.map((item: any) => ({
+    return this.http.get<GoogleBooksApiResponse>(apiUrl).pipe(
+      map((response) => {
+        let books: Book[] = response.items?.map((item) => ({
           title: item.volumeInfo.title,
           author: item.volumeInfo.authors?.join(', ') || 'Unknown',
           description: item.volumeInfo.description || 'No description available',
@@ -42,7 +41,7 @@ export class BookItemService {
   
         return {
           books,
-          totalFound: res.totalItems || books.length, 
+          totalFound: response.totalItems || books.length, 
         };
       })
     );

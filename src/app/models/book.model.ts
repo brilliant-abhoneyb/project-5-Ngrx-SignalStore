@@ -12,9 +12,31 @@ export interface Book {
   rating: number | string;
 }
 
-export interface Filter {
-  title: string;
-  order: 'asc' | 'desc';
-  page: number;
-  limit: number;
+export interface BookSearchResult {
+  books: Book[];
+  totalFound: number;
+}
+
+export interface GoogleBooksApiResponse {
+  items: [
+    {
+      volumeInfo: {
+        title: string;
+        authors?: string[];
+        description?: string;
+        previewLink?: string;
+        imageLinks?: 
+        { 
+          thumbnail?: string 
+        };
+        publisher?: string;
+        publishedDate?: string;
+        categories?: string[];
+        pageCount?: number;
+        language?: string;
+        averageRating?: number;
+      };
+    }
+  ];
+  totalItems: number;
 }
