@@ -1,4 +1,4 @@
-import { Component, inject, signal, effect } from '@angular/core';
+import { Component, inject, signal, effect, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { BooksStore } from '../data-access/books.store';
@@ -31,6 +31,26 @@ export class MainComponent {
   readonly selectedCategory = signal('');
   readonly selectedYear = signal('');
 
+  readonly paginatedPages = computed(() => {
+    const pages: number[] = [];
+    const total = this.totalPages();
+    const current = this.currentPage();
+  
+    if (total <= 1 || this.books().length === 0) return pages;
+  
+    const maxVisible = 5;
+    const start = Math.max(1, current - Math.floor(maxVisible / 2));
+    const end = Math.min(total, start + maxVisible - 1);
+  
+    for (let i = start; i <= end; i++) {
+      if (i <= total) {
+        pages.push(i);
+      }
+    }
+  
+    return pages;
+  });
+
   constructor() {
     effect(() => {
       const query = this.searchTermSignal();
@@ -57,23 +77,6 @@ export class MainComponent {
     } else {
       this.selectedYear.set(value);
     }
-  }
-  
-  paginatedPages(): number[] {
-    const pages: number[] = [];
-    const total = this.totalPages();
-    const current = this.currentPage();
-
-    if (total <= 1 || this.books().length === 0) return pages;
-
-    const maxVisible = 5;
-    const start = Math.max(1, current - Math.floor(maxVisible / 2));
-    const end = Math.min(total, start + maxVisible - 1);
-
-    for (let i = start; i <= end; i++) {
-      if (i <= total) { pages.push(i) }
-    }
-    return pages;
   }
 
   onPageChange(page: number): void {
