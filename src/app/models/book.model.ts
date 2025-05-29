@@ -11,3 +11,10 @@ export interface Book {
   language: string;
   rating: number | string;
 }
+
+export interface Filter {
+  title: string;
+  order: 'asc' | 'desc';
+  page: number;
+  limit: number;
+}

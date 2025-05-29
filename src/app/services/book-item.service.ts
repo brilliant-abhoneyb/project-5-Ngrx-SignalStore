@@ -3,13 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-export type SearchBooksQuery = {
-  query: string;
-  page: number;
-  limit: number;
-  category?: string;
-  year?: string;
-};
 
 @Injectable({
   providedIn: 'root',

@@ -1,8 +1,8 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { BooksStore } from '../data-access/books.store';
-import { debounceTime, tap } from 'rxjs';
+import { debounceTime } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -40,9 +40,6 @@ export class MainComponent {
 
     effect(() => {
       this.booksStore.updateCategory(this.selectedCategory());
-    });
-    
-    effect(() => {
       this.booksStore.updateYear(this.selectedYear());
     });
 
@@ -53,14 +50,13 @@ export class MainComponent {
     });
   }
 
-  onCategoryChange(event: Event): void {
+  onSelectionChange(field: 'category' | 'year', event: Event): void {
     const value = (event.target as HTMLSelectElement).value;
-    this.selectedCategory.set(value);
-  }
-  
-  onYearChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value;
-    this.selectedYear.set(value);
+    if (field === 'category') {
+      this.selectedCategory.set(value);
+    } else {
+      this.selectedYear.set(value);
+    }
   }
   
   paginatedPages(): number[] {
@@ -81,7 +77,8 @@ export class MainComponent {
   }
 
   onPageChange(page: number): void {
-    if (page < 1 || page > this.totalPages()) return;
-    this.booksStore.updatePage(page);
+    if (page >= 1 && page <= this.totalPages()) {
+      this.booksStore.updatePage(page);
+    }
   }
 }

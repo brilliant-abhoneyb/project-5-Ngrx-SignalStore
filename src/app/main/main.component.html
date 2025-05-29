@@ -9,13 +9,13 @@
 
     <div class="main__page-filters">
       <label>Category:</label>
-      <select [value]="selectedCategory()" (change)="onCategoryChange($event)">
+      <select [value]="selectedCategory()" (change)="onSelectionChange('category', $event)">
         <option value="">All Categories</option>
         <option *ngFor="let category of categories()" [value]="category">{{ category }}</option>
       </select>
 
       <label>Year:</label>
-      <select [value]="selectedYear()" (change)="onYearChange($event)">
+      <select [value]="selectedYear()" (change)="onSelectionChange('year', $event)">
         <option value="">All Years</option>
         <option *ngFor="let year of years()" [value]="year">{{ year }}</option>
       </select>

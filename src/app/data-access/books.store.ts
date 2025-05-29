@@ -1,42 +1,11 @@
-import { computed, inject } from '@angular/core';
-import {
-  signalStore,
-  withState,
-  withComputed,
-  withMethods,
-  patchState,
-} from '@ngrx/signals';
+import { inject } from '@angular/core';
+import { signalStore, withState, withComputed, withMethods, patchState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import {
-  BookItemService,
-  SearchBooksQuery,
-} from '../services/book-item.service';
 import { tap, map, catchError, of, finalize, pipe, switchMap } from 'rxjs';
+import { BooksState, initialState } from '../models/state.model';
+import { SearchBooksQuery } from '../models/state.model';
+import { BookItemService } from '../services/book-item.service';
 import { Book } from '../models/book.model';
-
-interface BooksState {
-  books: Book[];
-  isLoading: boolean;
-  searchTerm: string;
-  categories: string[];
-  years: string[];
-  selectedCategory: string;
-  selectedYear: string;
-  totalPages: number;
-  currentPage: number
-}
-
-const initialState: BooksState = {
-  books: [],
-  isLoading: false,
-  searchTerm: '',
-  categories: [],
-  years: [],
-  selectedCategory: '',
-  selectedYear: '',
-  totalPages: 5,
-  currentPage: 1
-};
 
 export const BooksStore = signalStore(
   { providedIn: 'root' },
