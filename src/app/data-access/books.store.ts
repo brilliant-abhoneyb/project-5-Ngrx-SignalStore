@@ -54,52 +54,38 @@ export const BooksStore = signalStore(
         )
       )
     ),
-    updateTitle(title: string) {
-      patchState(store, { books: [], currentPage: 1 });
+    triggerSearch({ query, page }: { query?: string; page?: number }) {
       this.loadByTitle({
-        query: title,
-        page: 1,
+        query: query ?? store.searchTerm(),
+        page: page ?? store.currentPage(),
         limit: 20,
         category: store.selectedCategory(),
-        year: store.selectedYear()
+        year: store.selectedYear(),
       });
+    },
+    
+    updateTitle(title: string) {
+      patchState(store, { books: [], currentPage: 1, searchTerm: title });
+      this.triggerSearch({query: title, page: 1});
     },
 
     updateSearchTerm(searchTerm: string) {
-      patchState(store, { searchTerm: searchTerm });
+      patchState(store, { searchTerm });
     },
 
     updateCategory(category: string) {
       patchState(store, { selectedCategory: category, currentPage: 1 });
-      this.loadByTitle({
-        query: store.searchTerm(),
-        page: 1,
-        limit: 20,
-        category,
-        year: store.selectedYear()
-      });
+      this.triggerSearch({ page: 1 });
     },
     
     updateYear(year: string) {
       patchState(store, { selectedYear: year, currentPage: 1 });
-      this.loadByTitle({
-        query: store.searchTerm(),
-        page: 1,
-        limit: 20,
-        category: store.selectedCategory(),
-        year
-      });
+      this.triggerSearch({ page: 1 });
     },    
 
     updatePage(page: number) {
       patchState(store, { currentPage: page });
-      this.loadByTitle({
-        query: store.searchTerm(),
-        page,
-        limit: 20,
-        category: store.selectedCategory(),
-        year: store.selectedYear()
-      });
+      this.triggerSearch({ page});
     },
   }))
 );
